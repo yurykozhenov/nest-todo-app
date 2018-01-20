@@ -1,28 +1,20 @@
-import { Component, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Component, NotFoundException, BadRequestException, Inject } from '@nestjs/common';
+import { Repository } from 'typeorm';
 
+import { TODO_REPOSITORY_TOKEN } from '../../constants';
 import { Todo } from './todo';
 
 @Component()
 export class TodosService {
-  private readonly todos: Todo[] = [
-    {
-      id: 1,
-      title: 'Feed the cat',
-      completed: false,
-    },
-    {
-      id: 2,
-      title: 'Buy groceries',
-      completed: true,
-    },
-  ];
-
-  findAll(): Todo[] {
-    return this.todos;
+  constructor(@Inject(TODO_REPOSITORY_TOKEN) private readonly todoRepository: Repository<Todo>) {
   }
 
-  findOne(id: number): Todo {
-    const todo = this.todos.find(t => t.id === id);
+  async findAll(): Promise<Todo[]> {
+    return await this.todoRepository.find();
+  }
+
+  async findOne(id: number): Promise<Todo> {
+    const todo = await this.todoRepository.findOneById(id);
 
     if (!todo) {
       throw new NotFoundException();
@@ -31,35 +23,27 @@ export class TodosService {
     return todo;
   }
 
-  create(todo: Todo): Todo {
-    this.todos.push(todo);
-
-    return todo;
+  async create(todo: Todo): Promise<Todo> {
+    return await this.todoRepository.save({ ...todo, id: null });
   }
 
-  update(id: number, todo: Todo): Todo {
-    const todoIndex = this.todos.findIndex(t => t.id === id);
-
+  async update(id: number, todo: Todo): Promise<void> { // Promise<Todo>
     if (id !== todo.id) {
       throw new BadRequestException();
     }
 
-    if (todoIndex === -1) {
-      throw new NotFoundException();
-    }
+    // if (todoNotFound) {
+    //   throw new NotFoundException();
+    // }
 
-    this.todos[todoIndex] = todo;
-
-    return todo;
+    return await this.todoRepository.updateById(id, todo);
   }
 
-  delete(id: number): void {
-    const todoIndex = this.todos.findIndex(t => t.id === id);
+  async delete(id: number): Promise<void> {
+    // if (todoNotFound) {
+    //   throw new NotFoundException();
+    // }
 
-    if (todoIndex === -1) {
-      throw new NotFoundException();
-    }
-
-    this.todos.splice(todoIndex, 1);
+    return await this.todoRepository.removeById(id);
   }
 }

@@ -11,12 +11,12 @@ export class TodosController {
 
 	@Get()
 	async findAll(): Promise<Todo[]> {
-    return this.todosService.findAll();
+    return await this.todosService.findAll();
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Todo> {
-    return this.todosService.findOne(Number(id));
+    return await this.todosService.findOne(Number(id));
   }
 
   @Post()
@@ -26,12 +26,12 @@ export class TodosController {
 
   @Put(':id')
   async update(@Param('id') id: string,
-               @Body() todo: Todo) {
+               @Body() todo: Todo): Promise<void> { // Promise<Todo>
     return this.todosService.update(Number(id), todo);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {
-    return this.todosService.delete(Number(id));
+  async delete(@Param('id') id: string): Promise<void> {
+    return await this.todosService.delete(Number(id));
   }
 }
