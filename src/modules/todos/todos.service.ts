@@ -24,7 +24,9 @@ export class TodosService {
   }
 
   async create(todo: Todo): Promise<Todo> {
-    return await this.todoRepository.save({ ...todo, id: null });
+    Reflect.deleteProperty(todo, 'id');
+
+    return await this.todoRepository.save(todo);
   }
 
   async update(id: number, todo: Todo): Promise<void> { // Promise<Todo>
