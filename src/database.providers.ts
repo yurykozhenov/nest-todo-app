@@ -12,7 +12,7 @@ export const databaseProviders = [
       type: CONNECTION_TYPE,
       url: DATABASE_URL,
       entities: [
-          __dirname + '/../**/*.entity{.ts,.js}',
+        __dirname + '/../**/*.entity{.ts,.js}',
       ],
       synchronize: true,
     }),
