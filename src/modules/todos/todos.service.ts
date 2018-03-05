@@ -1,13 +1,14 @@
-import { Component, NotFoundException, BadRequestException, Inject } from '@nestjs/common';
+import { Component, NotFoundException, BadRequestException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { TODO_REPOSITORY_TOKEN } from '../../constants';
-import { Todo } from './todo';
+import { Todo } from './todo.entity';
 
 @Component()
 export class TodosService {
-  constructor(@Inject(TODO_REPOSITORY_TOKEN) private readonly todoRepository: Repository<Todo>) {
-  }
+  constructor(
+    @InjectRepository(Todo) private readonly todoRepository: Repository<Todo>,
+  ) {}
 
   async findAll(): Promise<Todo[]> {
     return await this.todoRepository.find();
@@ -46,6 +47,6 @@ export class TodosService {
     //   throw new NotFoundException();
     // }
 
-    return await this.todoRepository.removeById(id);
+    return await this.todoRepository.deleteById(id);
   }
 }
