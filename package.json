@@ -1,8 +1,21 @@
 {
-  "name": "nest-typescript-starter",
+  "name": "nest-todo-app",
   "version": "1.0.0",
-  "description": "Nest TypeScript starter repository",
-  "license": "MIT",
+  "private": true,
+  "main": "index.js",
+  "engines": {
+    "node": "^8.9.0",
+    "npm": "^5.5.0"
+  },
+  "author": {
+    "name": "Yury Kozhenov",
+    "email": "yurykozhenov@gmail.com"
+  },
+  "homepage": "https://github.com/yurykozhenov",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yurykozhenov/nest-todo-app.git"
+  },
   "scripts": {
     "start": "node index.js",
     "start:watch": "nodemon",
