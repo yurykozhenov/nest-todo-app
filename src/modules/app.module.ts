@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 import { TodosModule } from './todos/todos.module';
 
 const CONNECTION_TYPE = process.env.DATABASE_URL ? 'postgres' : 'mysql' as any;
@@ -14,9 +16,9 @@ const DATABASE_URL = process.env.DATABASE_URL || 'mysql://root:root@localhost:33
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+    AuthModule,
+    UsersModule,
     TodosModule,
   ],
-  controllers: [],
-  components: [],
 })
 export class AppModule {}
